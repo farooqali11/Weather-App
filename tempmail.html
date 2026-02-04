@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TITAN Temp Mail</title>
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #1e1e1e;
+  color: #fff;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #f5b400;
+}
+
+.hire-btn {
+  background: transparent;
+  color: #f5b400;
+  border: 1px solid #f5b400;
+  padding: 8px 16px;
+}
+
+.container {
+  display: flex;
+  padding: 60px;
+  gap: 50px;
+}
+
+.left h1 span {
+  color: #f5b400;
+}
+
+.btns button {
+  margin-top: 20px;
+  margin-right: 10px;
+  padding: 10px 20px;
+}
+
+.primary {
+  background: #f5b400;
+  border: none;
+}
+
+.secondary {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.right {
+  background: #2a2a2a;
+  padding: 20px;
+  width: 350px;
+}
+
+.email-box {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.email-box input {
+  flex: 1;
+  padding: 8px;
+}
+
+.email-box button {
+  background: #f5b400;
+  border: none;
+  padding: 8px;
+}
+
+.inbox {
+  margin-top: 20px;
+}
+
+.features {
+  padding: 50px;
+  text-align: center;
+}
+
+.features span {
+  color: #f5b400;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.card {
+  background: #2a2a2a;
+  padding: 20px;
+  border: 1px solid #333;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #333;
+}
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <h2>🛡️ TEMP MAIL</h2>
+    <button class="hire-btn">Hire Me</button>
+  </header>
+
+  <main class="container">
+    <section class="left">
+      <h1>Temporary Email <span>In Seconds</span></h1>
+      <p>Protect your privacy with disposable email addresses. No registration required.</p>
+      <div class="btns">
+        <button class="primary">Get Started</button>
+        <button class="secondary">Learn More</button>
+      </div>
+    </section>
+
+    <section class="right">
+      <h3>Your Temporary Email</h3>
+      <div class="email-box">
+        <input type="text" id="email" readonly>
+        <button onclick="generateEmail()">Generate Email</button>
+      </div>
+
+      <div class="inbox">
+        <h4>Inbox</h4>
+        <ul id="messages"></ul>
+      </div>
+    </section>
+  </main>
+
+  <section class="features">
+    <h2>Why Choose <span>Temp Mail</span>?</h2>
+    <div class="grid">
+      <div class="card">⚡ Instant Generation</div>
+      <div class="card">🕵️ 100% Anonymous</div>
+      <div class="card">🔄 Auto Refresh</div>
+      <div class="card">🛡️ Spam Protection</div>
+      <div class="card">📱 Mobile Friendly</div>
+      <div class="card">⚙️ Powered by API</div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Temp Mail | Your privacy is our priority</p>
+  </footer>
+
+  <script>
+    let currentEmail = "";
+
+function generateEmail() {
+  fetch("https://catchmail.io/api/v1/mailbox", {
+    headers: {
+      "Authorization": "Bearer YOUR_API_KEY"
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    currentEmail = data.email;
+    document.getElementById("email").value = currentEmail;
+    fetchInbox();
+  })
+  .catch(() => {
+    alert("API Error! Add your API key.");
+  });
+}
+
+function fetchInbox() {
+  fetch(`https://catchmail.io/api/v1/mailbox/${currentEmail}/messages`, {
+    headers: {
+      "Authorization": "Bearer YOUR_API_KEY"
+    }
+  })
+  .then(res => res.json())
+  .then(messages => {
+    const list = document.getElementById("messages");
+    list.innerHTML = "";
+
+    messages.forEach(msg => {
+      const li = document.createElement("li");
+      li.textContent = msg.subject;
+      list.appendChild(li);
+    });
+  });
+}
+  </script>
+</body>
+</html>
